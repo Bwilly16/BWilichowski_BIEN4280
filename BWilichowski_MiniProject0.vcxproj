@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BWilichowski_binaryutils.cpp" />
+    <ClCompile Include="BWilichowski_MiniProject0.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BWilichowski_binaryutils.h" />

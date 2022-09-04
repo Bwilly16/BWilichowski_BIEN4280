@@ -18,6 +18,9 @@
     <ClCompile Include="BWilichowski_binaryutils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BWilichowski_MiniProject0.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BWilichowski_binaryutils.h">
