@@ -26,7 +26,7 @@ void setbits(uint32_t* addr, uint32_t bitmask)
 	*addr = *addr | bitmask; //Set only bits defined in the bitmask
 }
 
-void clearbits(uint32_t* addr, uint8_t bitmask)
+void clearbits(uint32_t* addr, uint32_t bitmask)
 {
 	*addr = *addr & ~bitmask; // Clear bits defined in the bitmask
 }
