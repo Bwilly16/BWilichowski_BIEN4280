@@ -10,15 +10,18 @@
 #define LEDSET (uint32_t*) 0x50000508 //Set LED Pin 
 #define LEDCLEAR (uint32_t*) 0x5000050c //Clear LED Pin
 
-
+const int writeaddr = 0xEE; //write for board
+const int readaddr = 0xEF; //read for board
 
 Ticker tick;
 EventFlags event_flags;
 Thread thread1;
 Thread thread2;
+Thread thread3;
 USBSerial MyMessage;
 
-//I2C i2c(I2C_SDA, I2C_SCL); 
+//I2C tempsensor(I2C_tempsensor, I2C_tempsensor);//
+I2C i2c(p14, p15); // sda, scl
 
 bool state;
 
@@ -73,12 +76,32 @@ void read_pressure()
     }
 }
 
+void ItoC()
+{
+    char temp[7]; 
+    
+    temp[0] =
+    temp[1] =
+    temp[2] =
+    temp[3] =
+    temp[4] =
+    temp[5] =
+    temp[6] =
+    
+
+
+    i2c.write(writeaddr, temp, 8); //setting SDA and SCL?
+    i2c.read(readaddr, temp, 8); //setting SDA and SCL?
+
+}
+
 // main() runs in its own thread in the OS
 int main()
 {
     tick.attach(&flipflop, 2);
     thread1.start(read_temperature);
     thread2.start(read_pressure);
+    thread3.start(ItoC);
 
     while (true) 
     {
