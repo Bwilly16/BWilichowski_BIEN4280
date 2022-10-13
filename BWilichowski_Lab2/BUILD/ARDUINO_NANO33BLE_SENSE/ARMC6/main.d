@@ -286,4 +286,6 @@ BUILD\ARDUINO_NANO33BLE_SENSE\ARMC6\main.o: main.cpp \
   mbed-os\drivers\usb\include\usb\internal\OperationListBase.h \
   mbed-os\drivers\usb\include\usb\internal\LinkedListBase.h \
   mbed-os\drivers\usb\include\usb\internal\LinkEntry.h \
-  mbed-os\drivers\usb\include\usb\internal\AsyncOp.h
+  mbed-os\drivers\usb\include\usb\internal\AsyncOp.h \
+  mbed-os\drivers\include\drivers\I2C.h \
+  mbed-os\drivers\include\drivers\DigitalOut.h

@@ -2,6 +2,8 @@
 #include "BWilichowski_binaryutils.h"
 #include "Ticker.h"
 #include "USBSerial.h"
+#include "I2C.h"
+#include "DigitalOut.h"
 
 #define temperature (1UL << 0) //temperature flag
 #define pressure (1UL << 1) //pressure flag
@@ -9,6 +11,8 @@
 #define LEDDIR (uint32_t*) 0x50000514  //In is ON, OUT is OFF
 #define LEDSET (uint32_t*) 0x50000508 //Set LED Pin 
 #define LEDCLEAR (uint32_t*) 0x5000050c //Clear LED Pin
+
+
 
 const int writeaddr = 0xEE; //write for board
 const int readaddr = 0xEF; //read for board
@@ -20,8 +24,9 @@ Thread thread2;
 Thread thread3;
 USBSerial MyMessage;
 
-//I2C tempsensor(I2C_tempsensor, I2C_tempsensor);//
-I2C i2c(p14, p15); // sda, scl
+I2C tempsensor(p14, p15); // sda, scl
+DigitalOut I2C_SCL(p14);
+DigitalOut I2C_SDA(p15);
 
 bool state;
 
@@ -78,20 +83,26 @@ void read_pressure()
 
 void ItoC()
 {
-    char temp[7]; 
-    
-    temp[0] =
-    temp[1] =
-    temp[2] =
-    temp[3] =
-    temp[4] =
-    temp[5] =
-    temp[6] =
-    
 
+    //Write(addr(chip address (0xEE)), subaddress(0xD0h), 1 byte long, false/true we want true)
+    //read(addr(chip address (0xEF)), data (memory address), 1, false) //returns a uint8 = char
+    //A1 = data[0]
+    //combined = 0000 0000 0000 0000 OR w/ data AB, shift data AA, OR together
+    //data_aa data_ab --- (data_aa << 8) need to OR these two together to get 16 bit value
 
-    i2c.write(writeaddr, temp, 8); //setting SDA and SCL?
-    i2c.read(readaddr, temp, 8); //setting SDA and SCL?
+    //DigitalOut(p1.1);
+    const char* subaddr[8]; 
+    subaddr[0] = 0xD0;
+    const char* data[8];
+
+    tempsensor.write(writeaddr, subaddr[0], 1, true); //setting SDA and SCL?
+    data[0] = subaddr[0];
+    tempsensor.read(readaddr, data[0], 1, false); //setting SDA and SCL?
+
+    while(true)
+    {
+
+    }
 
 }
 
