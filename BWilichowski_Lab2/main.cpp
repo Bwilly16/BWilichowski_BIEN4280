@@ -219,6 +219,11 @@ void ItoC()
     tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
     MyMessage.printf("MD second half coefficient: %i \r\n", data[0]);
     
+    subaddr[0] = 0x2E;
+    data[1] = 0xF4;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true);
+    thread_sleep_for(5);
+    
     while(true)
     {
 
