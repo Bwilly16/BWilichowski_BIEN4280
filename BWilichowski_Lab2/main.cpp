@@ -2,7 +2,7 @@
 #include "BWilichowski_binaryutils.h"
 #include "Ticker.h"
 #include "USBSerial.h"
-#include <I2C.h>
+#include "I2C.h"
 #include "DigitalOut.h"
 
 #define temperature (1UL << 0) //temperature flag
@@ -26,7 +26,7 @@ Thread thread3;
 USBSerial MyMessage;
 
 I2C tempsensor(I2C_SDA0, I2C_SCL0); // sda, scl
-DigitalOut SetHigh(p32);
+DigitalOut SetHigh(p32); //P1.0
 
 
 bool state;
@@ -53,6 +53,7 @@ void flipflop()
 
 void read_temperature()
 {
+    thread_sleep_for(1000);
     setbit(LEDDIR, 6);
     while(true)
     {
@@ -69,6 +70,7 @@ void read_temperature()
 
 void read_pressure()
 {
+    thread_sleep_for(1000);
     setbit(LEDDIR, 24);
     while(true)
     {
@@ -95,19 +97,128 @@ void ItoC()
     char subaddr[2];
     char data[0];
 
-    subaddr[0] = 0XD0;
+    
     //subaddr[1] = 0X00;
 
     uint8_t test;
     uint8_t test1;
 
-
+    subaddr[0] = 0XD0;
     tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
     tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
-
     MyMessage.printf("Output from Who am I register: %i \r\n", data[0]);
+        
+    subaddr[0] = 0xAA;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("AC1 first half coefficient: %i \r\n", data[0]);
+   
+    subaddr[0] = 0xAB;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("AC1 second half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xAC;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("AC2 first half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xAD;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("AC2 second half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xAE;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("AC3 first half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xAF;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("AC3 second half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xB0;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("AC4 first half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xB1;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("AC4 second half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xB2;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("AC5 first half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xB3;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("AC5 second half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xB4;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("AC6 first half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xB5;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("AC6 second half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xB6;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("B1 first half coefficient: %i \r\n", data[0]);
     
 
+    subaddr[0] = 0xB7;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("B1 second half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xB8;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("B2 first half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xB9;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("B2 second half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xBa;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("MB first half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xBB;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("MB second half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xBC;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("MC first half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xBD;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("MC second half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xBE;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("MD first half coefficient: %i \r\n", data[0]);
+    
+    subaddr[0] = 0xBF;
+    tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
+    tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
+    MyMessage.printf("MD second half coefficient: %i \r\n", data[0]);
+    
     while(true)
     {
 
