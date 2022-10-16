@@ -260,9 +260,13 @@ void ItoC()
     MyMessage.printf("B2 coefficient: %i \r\n", MB);    
    
     */
+    
+
+    while(true)
+    { 
     char temp[2];
-    temp[0] = 0x2E;
-    temp[1] = 0xF4;
+    temp[0] = 0xF4;
+    temp[1] = 0x2E;
     char hold[2];
     uint16_t MSB;
     uint16_t LSB;
@@ -270,7 +274,10 @@ void ItoC()
    
     tempsensor.write(writeaddr, (const char*) temp, 2, true);
     thread_sleep_for(5);
-    tempsensor.read(readaddr, hold, 2, true);
+
+    temp[0] = 0xF6;
+    tempsensor.write(writeaddr, (const char*) temp, 1, true);
+    tempsensor.read(readaddr, hold, 1, false);
     
     MSB = hold[0];
     LSB = hold[1];
@@ -285,11 +292,6 @@ void ItoC()
     int16_t T = (B5 + 8) / pow(2,4);
 
     MyMessage.printf("True Temperature: %i\n\r", T);
-
-    while(true)
-    {
-    
-    
     }
 
 }
