@@ -265,8 +265,8 @@ void ItoC()
     while(true)
     { 
     char temp[2];
-    temp[0] = 0xF4;
-    temp[1] = 0x2E;
+    temp[0] = 0xF4;//address I want to write to 
+    temp[1] = 0x2E;//what I want to write to the address
     char hold[2];
     uint16_t MSB;
     uint16_t LSB;
@@ -282,16 +282,16 @@ void ItoC()
     MSB = hold[0];
     LSB = hold[1];
     UT = ((MSB << 8)|LSB);
-    MyMessage.printf("MSB: %i \n\r", hold[0]);
+    MyMessage.printf("MSB: %i \n\r", hold[0]);//printing out array values to see if they are consistent with what I would expect.
     MyMessage.printf("LSB: %i \n\r", hold[1]);
     MyMessage.printf("Uncompensated temperature value: %i \n\r", UT);
 
-    int16_t X1 = (UT - AC6)* AC5 / pow(2,15);
+    int16_t X1 = (UT - AC6)* AC5 / pow(2,15);//made all of these unsigned so the temperature could possibly be negative
     int16_t X2 = MC * pow(2,11) / (X1 + MD);
     int16_t B5 = X1 + X2;
     int16_t T = (B5 + 8) / pow(2,4);
 
-    MyMessage.printf("True Temperature: %i\n\r", T);
+    MyMessage.printf("True Temperature: %i\n\r", T);//print out of live, true temperature 
     }
 
 }
