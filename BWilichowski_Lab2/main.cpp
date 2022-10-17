@@ -84,7 +84,7 @@ void read_pressure()
     }
 }
 
-void ItoC()
+void ItoCTemp()
 {
 
     //Write(addr(chip address (0xEE)), subaddress(0xD0h), 1 byte long, false/true we want true)
@@ -95,7 +95,7 @@ void ItoC()
 
    
     char subaddr[8];
-    char data[0];
+    char data[1];
 
     
     //subaddr[1] = 0X00;
@@ -113,7 +113,9 @@ void ItoC()
     tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
    //MyMessage.printf("Output from Who am I register: %i \r\n", test);
    // MyMessage.printf("Output from Who am I register: %i \r\n", test1);
-    
+
+
+//Temperature   
 //ac6
     subaddr[0] = 0xB4;
     tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
@@ -125,7 +127,7 @@ void ItoC()
     tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
     LestSig = data[0];
     uint16_t AC6 = ((MostSig<<8)|LestSig);
-    MyMessage.printf("AC6 coefficient: %i \r\n", AC6);
+    //MyMessage.printf("AC6 coefficient: %i \r\n", AC6);
 
 //ac5
     subaddr[0] = 0xB2;
@@ -138,7 +140,7 @@ void ItoC()
     tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
     LestSig = data[0];
     uint16_t AC5 = ((MostSig<<8)|LestSig);
-    MyMessage.printf("AC5 coefficient: %i \r\n", AC5);
+   // MyMessage.printf("AC5 coefficient: %i \r\n", AC5);
 
 //mc
     subaddr[0] = 0xBC;
@@ -151,7 +153,7 @@ void ItoC()
     tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
     LestSig = data[0];
     int16_t MC = ((MostSig<<8)|LestSig);
-    MyMessage.printf("MC coefficient: %i \r\n", MC);
+    //MyMessage.printf("MC coefficient: %i \r\n", MC);
     
 //md
     subaddr[0] = 0xBE;
@@ -164,10 +166,10 @@ void ItoC()
     tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
     LestSig = data[0];
     int16_t MD = ((MostSig<<8)|LestSig);
-    MyMessage.printf("MD coefficient: %i \r\n", MD);
+   // MyMessage.printf("MD coefficient: %i \r\n", MD);
 
 
- /*  
+//Pressure  
 //AC1     
     subaddr[0] = 0xAA;
     tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
@@ -178,8 +180,8 @@ void ItoC()
     tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
     tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
     LestSig = data[0];
-    uint16_t AC1 = ((MostSig<<8)|LestSig);
-    MyMessage.printf("AC1 coefficient: %i \r\n", AC1);
+    int16_t AC1 = ((MostSig<<8)|LestSig);
+   // MyMessage.printf("AC1 coefficient: %i \r\n", AC1);
     
 //AC2
     subaddr[0] = 0xAC;
@@ -191,8 +193,8 @@ void ItoC()
     tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
     tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
     LestSig = data[0];
-    uint16_t AC2 = ((MostSig<<8)|LestSig);
-    MyMessage.printf("AC2 coefficient: %i \r\n", AC2);
+    int16_t AC2 = ((MostSig<<8)|LestSig);
+   // MyMessage.printf("AC2 coefficient: %i \r\n", AC2);
     
 //AC3
     subaddr[0] = 0xAE;
@@ -204,8 +206,8 @@ void ItoC()
     tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
     tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
     LestSig = data[0];
-    uint16_t AC3 = ((MostSig<<8)|LestSig);
-    MyMessage.printf("AC3 coefficient: %i \r\n", AC3);
+    int16_t AC3 = ((MostSig<<8)|LestSig);
+   // MyMessage.printf("AC3 coefficient: %i \r\n", AC3);
         
 //AC4
     subaddr[0] = 0xB0;
@@ -218,7 +220,7 @@ void ItoC()
     tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
     LestSig = data[0];
     uint16_t AC4 = ((MostSig<<8)|LestSig);
-    MyMessage.printf("AC4 coefficient: %i \r\n", AC4);
+   // MyMessage.printf("AC4 coefficient: %i \r\n", AC4);
             
 //B1   
     subaddr[0] = 0xB6;
@@ -230,8 +232,8 @@ void ItoC()
     tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
     tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
     LestSig = data[0];
-    uint16_t B1 = ((MostSig<<8)|LestSig);
-    MyMessage.printf("B1 coefficient: %i \r\n", B1);
+    int16_t B1 = ((MostSig<<8)|LestSig);
+   // MyMessage.printf("B1 coefficient: %i \r\n", B1);
     
 //B2
     subaddr[0] = 0xB8;
@@ -243,8 +245,8 @@ void ItoC()
     tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
     tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
     LestSig = data[0];
-    uint16_t B2 = ((MostSig<<8)|LestSig);
-    MyMessage.printf("B2 coefficient: %i \r\n", B2);
+    int16_t B2 = ((MostSig<<8)|LestSig);
+   // MyMessage.printf("B2 coefficient: %i \r\n", B2);
 
 //MB
     subaddr[0] = 0xBa;
@@ -256,23 +258,26 @@ void ItoC()
     tempsensor.write(writeaddr, (const char*) subaddr, 1, true); //setting SDA and SCL? 
     tempsensor.read(readaddr, data, 1, false); //setting SDA and SCL?
     LestSig = data[0];
-    uint16_t MB = ((MostSig<<8)|LestSig);
-    MyMessage.printf("B2 coefficient: %i \r\n", MB);    
-   
-    */
-    
+    int16_t MB = ((MostSig<<8)|LestSig);
+    //MyMessage.printf("B2 coefficient: %i \r\n", MB);    
 
-    while(true)
-    { 
     char temp[2];
     temp[0] = 0xF4;//address I want to write to 
     temp[1] = 0x2E;//what I want to write to the address
     char hold[2];
     uint16_t MSB;
     uint16_t LSB;
-    uint16_t UT;
-   
-    tempsensor.write(writeaddr, (const char*) temp, 2, true);
+    uint32_t UT;
+    uint16_t oss = 0;
+    uint16_t USLB = 0;
+    char temp1[3];
+    temp1[0] = 0xF4;
+    temp1[1] = (0x34 + (oss << 6));
+    int32_t p;
+
+    while(true)
+    { 
+    tempsensor.write(writeaddr, (const char*) temp, 2, true); //writing 2E to the address of F4
     thread_sleep_for(5);
 
     temp[0] = 0xF6;
@@ -282,16 +287,57 @@ void ItoC()
     MSB = hold[0];
     LSB = hold[1];
     UT = ((MSB << 8)|LSB);
-    MyMessage.printf("MSB: %i \n\r", hold[0]);//printing out array values to see if they are consistent with what I would expect.
-    MyMessage.printf("LSB: %i \n\r", hold[1]);
-    MyMessage.printf("Uncompensated temperature value: %i \n\r", UT);
+    // MyMessage.printf("MSB: %i \n\r", hold[0]);//printing out array values to see if they are consistent with what I would expect.
+    // MyMessage.printf("LSB: %i \n\r", hold[1]);
+    // MyMessage.printf("Uncompensated temperature value: %i \n\r", UT);
 
     int16_t X1 = (UT - AC6)* AC5 / pow(2,15);//made all of these unsigned so the temperature could possibly be negative
     int16_t X2 = MC * pow(2,11) / (X1 + MD);
     int16_t B5 = X1 + X2;
-    int16_t T = (B5 + 8) / pow(2,4);
+    int16_t T = ((B5|8) / pow(2,4) * (0.1));
 
-    MyMessage.printf("True Temperature: %i\n\r", T);//print out of live, true temperature 
+    MyMessage.printf("True Temperature in celsius: %i\n\r", T);//print out of live, true temperature 
+
+    //calculate pressure 
+
+   tempsensor.write(writeaddr, (const char*) temp, 2, true);
+   thread_sleep_for(5);
+
+    temp1[0] = 0xF6;
+    temp1[1] = 0xF7;
+    temp1[2] = 0xF8;
+   tempsensor.read(readaddr, temp1, 3, false);
+   MSB = 
+
+int32_t B6 = (B5 - 4000);
+X1 = (B2 * (B6 * B6 / pow(2,12)) / pow(2,11));
+X2 = AC2 * B6 / pow(2,11);
+int32_t X3 = X1 + X2;
+int32_t B3 = (((AC1*4 + X3)<<oss)+2)/4;
+        X1 = AC3*B6 / pow(2,13);
+        X2 = (B1 * (B6 * B6 / pow(2,12)) / pow(2,16));
+        X3 = ((X1 + X2) + 2) / pow(2,2);
+uint32_t B4 = AC4 * (unsigned long)(X3 + 32768)/ pow(2,15);
+uint32_t B7 = (((unsigned long)UP - B3)*(50000>>oss));
+if(B7 < 0x80000000)
+{
+p = (B7*2)/B4;
+}
+else
+{
+p = (B7 / B4)*2;
+}
+X1 = (p/ pow(2,8)) * (p/ pow(2,8));
+X1 = (X1 * 3038)/pow(2,16);
+X2 = (-7357 * p) / pow(2,16);
+p = p + (X1 + X2 + 3791) / pow(2,4);
+
+MyMessage.printf("Pressure in Pa = %i", p);
+
+
+
+
+
     }
 
 }
@@ -303,7 +349,7 @@ int main()
     tick.attach(&flipflop, 2);
     //thread1.start(read_temperature);
    // thread2.start(read_pressure);
-    thread3.start(ItoC);
+    thread3.start(ItoCTemp);
    
     
 

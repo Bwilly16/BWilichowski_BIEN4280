@@ -13,10 +13,10 @@
     {
         "module": "[lib]\\fz_wm.l",
         "size": {
-            ".text": 1366,
+            ".text": 1404,
             ".data": 0,
             ".bss": 0,
-            ".text-delta": 0,
+            ".text-delta": 38,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -57,10 +57,10 @@
     {
         "module": "main.o",
         "size": {
-            ".text": 1821,
+            ".text": 2226,
             ".data": 0,
             ".bss": 1958,
-            ".text-delta": 0,
+            ".text-delta": -4,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -146,8 +146,8 @@
         "summary": {
             "static_ram": 13533,
             "static_ram_delta": 0,
-            "total_flash": 73909,
-            "total_flash_delta": 0
+            "total_flash": 74352,
+            "total_flash_delta": 34
         }
     }
 ]
