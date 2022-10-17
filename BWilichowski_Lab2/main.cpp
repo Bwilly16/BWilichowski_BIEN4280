@@ -27,6 +27,7 @@ USBSerial MyMessage;
 
 I2C tempsensor(I2C_SDA0, I2C_SCL0); // sda, scl
 DigitalOut SetHigh(p32); //P1.0
+Mutex locker;
 
 
 bool state;
@@ -267,6 +268,7 @@ void ItoCTemp()
     char hold[2];
     uint16_t MSB;
     uint16_t LSB;
+    uint16_t XLSB;
     uint32_t UT;
     uint16_t oss = 0;
     uint16_t USLB = 0;
@@ -307,7 +309,10 @@ void ItoCTemp()
     temp1[1] = 0xF7;
     temp1[2] = 0xF8;
    tempsensor.read(readaddr, temp1, 3, false);
-   MSB = 
+   MSB = temp1[0];
+   LSB = temp1[1];
+   XLSB = temp1[2];
+   int32_t UP = ((MSB << 16) + (LSB<<8) + (XLSB)) >>(8-oss);
 
 int32_t B6 = (B5 - 4000);
 X1 = (B2 * (B6 * B6 / pow(2,12)) / pow(2,11));
@@ -332,7 +337,7 @@ X1 = (X1 * 3038)/pow(2,16);
 X2 = (-7357 * p) / pow(2,16);
 p = p + (X1 + X2 + 3791) / pow(2,4);
 
-MyMessage.printf("Pressure in Pa = %i", p);
+MyMessage.printf("Pressure in Pa = %i \n\r", p);
 
 
 
