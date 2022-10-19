@@ -1,5 +1,16 @@
 [
     {
+        "module": "BWilichowski_binaryutils.o",
+        "size": {
+            ".text": 14,
+            ".data": 0,
+            ".bss": 0,
+            ".text-delta": 0,
+            ".data-delta": 0,
+            ".bss-delta": 0
+        }
+    },
+    {
         "module": "[lib]\\c_w.l",
         "size": {
             ".text": 4206,
@@ -57,10 +68,10 @@
     {
         "module": "main.o",
         "size": {
-            ".text": 2810,
+            ".text": 3356,
             ".data": 0,
-            ".bss": 1958,
-            ".text-delta": 4,
+            ".bss": 2014,
+            ".text-delta": -4,
             ".data-delta": 0,
             ".bss-delta": 0
         }
@@ -68,7 +79,7 @@
     {
         "module": "mbed-os\\cmsis",
         "size": {
-            ".text": 12395,
+            ".text": 12665,
             ".data": 168,
             ".bss": 6609,
             ".text-delta": 0,
@@ -123,7 +134,7 @@
     {
         "module": "mbed-os\\rtos",
         "size": {
-            ".text": 1447,
+            ".text": 1501,
             ".data": 0,
             ".bss": 0,
             ".text-delta": 0,
@@ -144,10 +155,10 @@
     },
     {
         "summary": {
-            "static_ram": 13533,
+            "static_ram": 13589,
             "static_ram_delta": 0,
-            "total_flash": 75838,
-            "total_flash_delta": 4
+            "total_flash": 76722,
+            "total_flash_delta": -4
         }
     }
 ]
