@@ -63,10 +63,10 @@ void BlinkLED()
     uint32_t Speed = 0;
      while (true) {
         
-         if (!mail_box.empty())
+         if (!mail_box.empty()) //using the OS event from lab1 (maybe lab 0 i cant remember) did not work, so I tried this way.
          {
     mail_t *mail = mail_box.try_get();
-    RedOut = mail -> Red_grab;
+    RedOut = mail -> Red_grab; //assigning my new OUT variables to the values in the mailbox
     GreenOut = mail -> Green_grab;
     BlueOut = mail -> Blue_grab;
     ClearOut = mail -> Clear_grab;
