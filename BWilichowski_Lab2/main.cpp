@@ -55,7 +55,6 @@ void flipflop()
 
 void read_temperature()
 {
-//locker_mutex.lock();
 const int writeaddr = 0xEE; //write for board
 const int readaddr = 0xEF; //read for board
 //Coefficients
@@ -154,12 +153,9 @@ char data[1];
     while(true)
     {
     event_flags.wait_all(temperature);
-   
     MyMessage.printf("Pressure LED OFF, Temp LED ON \n\r");
-   
     setbit(LEDCLEAR, 6);
     setbit(LEDSET, 6);
-     
     
 
     temp[0] = 0xF4;//address I want to write to 
@@ -189,14 +185,13 @@ char data[1];
     
 
     }
- // locker_mutex.unlock();  
+
 }
 
 
 
 void read_pressure()
 {
-//locker_mutex.lock();
 const int writeaddr = 0xEE; //write for board
 const int readaddr = 0xEF; //read for board
 
@@ -328,7 +323,6 @@ char temp1[3];
 
 
     setbit(LEDDIR, 24);
-    
     while(true)
     {
    
@@ -392,8 +386,7 @@ char temp1[3];
   
     
 
-    }
-  // locker_mutex.unlock(); 
+    } 
 }
  
 
@@ -404,7 +397,7 @@ int main()
 
     SetHigh = 1;
     tick.attach(&flipflop, 2);
-   // thread1.start(read_temperature);
+   //thread1.start(read_temperature);
    thread2.start(read_pressure);
    
     
