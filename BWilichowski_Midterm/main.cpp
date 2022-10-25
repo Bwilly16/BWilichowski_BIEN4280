@@ -77,6 +77,7 @@ void BlinkLED()
            led2.write(0.5);
            led.write(1);
            led1.write(1); 
+           
         MyMessage.printf("Red\n\r");
        }
        else if((BlueOut>GreenOut) && (BlueOut>RedOut) && (GreenOut>RedOut))
@@ -84,6 +85,7 @@ void BlinkLED()
            led.write(0.5);
            led2.write(1);
            led1.write(1);
+
          MyMessage.printf("Blue\n\r");
        }
        else if((GreenOut>BlueOut) && (GreenOut>RedOut))
@@ -91,6 +93,7 @@ void BlinkLED()
            led1.write(0.5);
            led2.write(1);
            led.write(1);
+
         MyMessage.printf("Green\n\r");
         
        }
