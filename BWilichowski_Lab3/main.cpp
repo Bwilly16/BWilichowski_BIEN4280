@@ -42,7 +42,7 @@ Gap& gap = bleinit.gap();
 GattServer& gattServe = bleinit.gattServer();
 GattClient& gattClient = bleinit.gattClient();
 
-int16_t TOUT =0;
+int16_t TOUT = 0;
 
 using namespace ble;
 
@@ -50,6 +50,13 @@ using namespace ble;
  * Event handler struct
  */
 struct GapEventHandler : Gap::EventHandler{
+    void onAdvertisingStart(const AdvertisingStartEvent &event){
+    ser.printf("Start Advertisting\n\r");
+    }
+    void onAdvertisingStop(const AdvertisingEndEvent &event){
+    ser.printf("Stop Advertisting\n\r");
+    }
+    
     /* 
 	 * Implement the functions here that you think you'll need. These are defined in the GAP EventHandler:
      * https://os.mbed.com/docs/mbed-os/v6.6/mbed-os-api-doxy/structble_1_1_gap_1_1_event_handler.html
@@ -116,9 +123,24 @@ void measure_temp(){
     }
 }
 
-void on_init_complete(BLE::InitializationCompleteCallbackContext *params){
+void on_init_complete(BLE::InitializationCompleteCallbackContext *params){ //callback function defeniton 
+    if(params-> error){
+        ser.printf("Initialization was NOT complete...\n\r"); //notify terminal that initialization was not successful
+    }
+    else{
+        ser.printf("Initialization was complete!\n\r"); //notify terminal that initialization was successful
+            gap.setAdvertisingPayload(
+            LEGACY_ADVERTISING_HANDLE,
+            AdvertisingDataSimpleBuilder<LEGACY_ADVERTISING_MAX_SIZE>()
+            .setFlags()
+            .setName("Ben's Chip", true)
+            .getAdvertisingData()
+            );
+      gap.startAdvertising(LEGACY_ADVERTISING_HANDLE);
+    }
 
 }
+    
 
 /* Schedule processing of events from the BLE middleware in the event queue. */
 void schedule_ble_events(BLE::OnEventsToProcessCallbackContext *context){
@@ -133,7 +155,8 @@ int main(){
     sensor_pwr.write(1);
 
     bleinit.onEventsToProcess(schedule_ble_events);
-   
+    ble_error_t init(BLE::InitializationCompleteCallbackContext *params);//initialize ble
+    bleinit.init(&on_init_complete); //maybe the call back once initialization is complete?
 
     // This will never return...
     event_queue.dispatch_forever();
