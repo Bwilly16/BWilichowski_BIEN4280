@@ -50,11 +50,15 @@ using namespace ble;
  * Event handler struct
  */
 struct GapEventHandler : Gap::EventHandler{
+
+    void onScanRequestRecieved( const ScanRequestEvent &event){
+        ser.printf("Rude words");
+    }
     void onAdvertisingStart(const AdvertisingStartEvent &event){
-    ser.printf("Start Advertisting\n\r");
+        ser.printf("Start Advertisting\n\r");
     }
     void onAdvertisingStop(const AdvertisingEndEvent &event){
-    ser.printf("Stop Advertisting\n\r");
+        ser.printf("Stop Advertisting\n\r");
     }
     
     /* 
