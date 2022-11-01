@@ -28,14 +28,18 @@
 #include <ble/gatt/GattCharacteristic.h>
 #include <ble/gatt/GattService.h>
 #include "att_uuid.h"
+#include "DigitalOut.h"
 
 #include <USBSerial.h>
 
 USBSerial ser;
 
 Thread tempthread;
+//DigitalOut red(LED2); //red
+//DigitalOut blue(LED4);//blue
 
 static events::EventQueue event_queue(16 * EVENTS_EVENT_SIZE);
+static ble::scan_duration_t scan_time(ble::millisecond_t(5000));
 
 BLE &bleinit= BLE::Instance();
 Gap& gap = bleinit.gap();
@@ -49,16 +53,37 @@ using namespace ble;
 /**
  * Event handler struct
  */
+struct GattEventHandler : GattServer::EventHandler{
+
+}
 struct GapEventHandler : Gap::EventHandler{
 
-    void onScanRequestRecieved( const ScanRequestEvent &event){
-        ser.printf("Rude words");
+    void onScanRequestRecieved(const ScanRequestEvent &event){
+        ser.printf("Scan Request Recieved.\n\r");
     }
     void onAdvertisingStart(const AdvertisingStartEvent &event){
-        ser.printf("Start Advertisting\n\r");
+        ser.printf("Advertising Started\n\r");
     }
-    void onAdvertisingStop(const AdvertisingEndEvent &event){
-        ser.printf("Stop Advertisting\n\r");
+    void onAdvertisingEnd(const AdvertisingEndEvent &event){//unspec,timout,reached,none
+        ser.printf("Advertising Stopped\n\r");
+        if(event.getStatus() == BLE_ERROR_UNSPECIFIED){
+            ser.printf("Advertising Stopped for Unknown Error.\n\r");
+        }
+        else if (event.getStatus() == BLE_ERROR_TIMEOUT){
+            ser.printf("Advertising Stopped due to timeout.\n\r");
+        }
+        else if (event.getStatus() == BLE_ERROR_LIMIT_REACHED){
+            ser.printf("Advertising Stopped due to limit reached.\n\r");
+        }
+        else if (event.getStatus() == BLE_ERROR_NONE){
+            if(event.isConnected()){
+                ser.printf("Device is connected!\n\r");
+            }
+            else{
+                ser.printf("Device is NOT connected\n\r");
+            }
+        }
+    
     }
     
     /* 
@@ -127,22 +152,25 @@ void measure_temp(){
     }
 }
 
+
 void on_init_complete(BLE::InitializationCompleteCallbackContext *params){ //callback function defeniton 
-    if(params-> error){
+    if(params -> error){
         ser.printf("Initialization was NOT complete...\n\r"); //notify terminal that initialization was not successful
     }
     else{
-        ser.printf("Initialization was complete!\n\r"); //notify terminal that initialization was successful
-            gap.setAdvertisingPayload(
-            LEGACY_ADVERTISING_HANDLE,
-            AdvertisingDataSimpleBuilder<LEGACY_ADVERTISING_MAX_SIZE>()
-            .setFlags()
-            .setName("Ben's Chip", true)
-            .getAdvertisingData()
-            );
-      gap.startAdvertising(LEGACY_ADVERTISING_HANDLE);
+        ser.printf("Initialization was complete!\n\r"); //notify terminal that initialization was successful       
     }
+            gap.setEventHandler(&THE_gap_EvtHandler);
+            gap.setAdvertisingPayload(
+                LEGACY_ADVERTISING_HANDLE,
+                AdvertisingDataSimpleBuilder<LEGACY_ADVERTISING_MAX_SIZE>()
+                .setFlags()
+                .setName("Ben's Chip", true)
+                .getAdvertisingData()
+                );
 
+      gap.startAdvertising(LEGACY_ADVERTISING_HANDLE);   
+      gap.startScan(scan_time);  
 }
     
 
