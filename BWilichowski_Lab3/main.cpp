@@ -41,9 +41,13 @@ Thread tempthread;
 static events::EventQueue event_queue(16 * EVENTS_EVENT_SIZE);
 static ble::scan_duration_t scan_time(ble::millisecond_t(5000));
 
+//BLE instance
 BLE &bleinit= BLE::Instance();
+//Gap instance
 Gap& gap = bleinit.gap();
+//Gatt server
 GattServer& gattServe = bleinit.gattServer();
+//Gatt client 
 GattClient& gattClient = bleinit.gattClient();
 
 int16_t TOUT = 0;
