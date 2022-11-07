@@ -39,7 +39,7 @@ Thread tempthread;
 //DigitalOut blue(LED4);//blue
 
 static events::EventQueue event_queue(16 * EVENTS_EVENT_SIZE);
-static ble::scan_duration_t scan_time(ble::millisecond_t(5000));
+//static ble::scan_duration_t scan_time(ble::millisecond_t(5000));
 
 //BLE instance
 BLE &bleinit= BLE::Instance();
@@ -51,15 +51,16 @@ GattServer& gattServe = bleinit.gattServer();
 GattClient& gattClient = bleinit.gattClient();
 
 int16_t TOUT = 0;
+uint16_t myUUID = 16;
 
 using namespace ble;
 
 /**
  * Event handler struct
  */
-struct GattEventHandler : GattServer::EventHandler{
+//struct GattEventHandler : GattServer::EventHandler{
 
-}
+//}
 struct GapEventHandler : Gap::EventHandler{
 
     void onScanRequestRecieved(const ScanRequestEvent &event){
@@ -174,7 +175,14 @@ void on_init_complete(BLE::InitializationCompleteCallbackContext *params){ //cal
                 );
 
       gap.startAdvertising(LEGACY_ADVERTISING_HANDLE);   
-      gap.startScan(scan_time);  
+      //gap.startScan(scan_time); 
+
+//Gatt Stuff
+    
+      char myProp[] = {0x00};
+      uint16_t UUID_HEALTH_THERMOMETER_SERVICE = 0x1809;
+      ReadOnlyGattCharacteristic(myUUID, &TOUT, GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ, myProp, 0); //value pointer?
+      GattService myService(UUID_HEALTH_THERMOMETER_SERVICE, myProp, 1);
 }
     
 
@@ -192,7 +200,8 @@ int main(){
 
     bleinit.onEventsToProcess(schedule_ble_events);
     ble_error_t init(BLE::InitializationCompleteCallbackContext *params);//initialize ble
-    bleinit.init(&on_init_complete); //maybe the call back once initialization is complete?
+    bleinit.init(&on_init_complete);
+    bleinit.addService(myService);
 
     // This will never return...
     event_queue.dispatch_forever();
