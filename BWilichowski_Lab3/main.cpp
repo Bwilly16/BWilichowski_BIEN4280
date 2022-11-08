@@ -39,7 +39,7 @@ Thread tempthread;
 //DigitalOut blue(LED4);//blue
 
 static events::EventQueue event_queue(16 * EVENTS_EVENT_SIZE);
-//static ble::scan_duration_t scan_time(ble::millisecond_t(5000));
+static ble::scan_duration_t scan_time(ble::millisecond_t(5000));
 
 //BLE instance
 BLE &bleinit= BLE::Instance();
@@ -51,16 +51,17 @@ GattServer& gattServe = bleinit.gattServer();
 GattClient& gattClient = bleinit.gattClient();
 
 int16_t TOUT = 0;
-uint16_t myUUID = 16;
+ReadOnlyGattCharacteristic<int16_t> *myTemp;
+GattService *myServe;
+GattCharacteristic *myDesc[1];
+UUID myUUID("4285070f-3594-4235-add0-689d20ff780a");
 
 using namespace ble;
 
 /**
  * Event handler struct
  */
-//struct GattEventHandler : GattServer::EventHandler{
 
-//}
 struct GapEventHandler : Gap::EventHandler{
 
     void onScanRequestRecieved(const ScanRequestEvent &event){
@@ -165,6 +166,7 @@ void on_init_complete(BLE::InitializationCompleteCallbackContext *params){ //cal
     else{
         ser.printf("Initialization was complete!\n\r"); //notify terminal that initialization was successful       
     }
+
             gap.setEventHandler(&THE_gap_EvtHandler);
             gap.setAdvertisingPayload(
                 LEGACY_ADVERTISING_HANDLE,
@@ -175,14 +177,26 @@ void on_init_complete(BLE::InitializationCompleteCallbackContext *params){ //cal
                 );
 
       gap.startAdvertising(LEGACY_ADVERTISING_HANDLE);   
-      //gap.startScan(scan_time); 
+      gap.startScan(scan_time);
+
 
 //Gatt Stuff
-    
-      char myProp[] = {0x00};
+      myTemp = new ReadOnlyGattCharacteristic<int16_t>(myUUID, &TOUT, GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ | GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_INDICATE, nullptr, 0); 
+      ser.printf("got past read only\n\r");
       uint16_t UUID_HEALTH_THERMOMETER_SERVICE = 0x1809;
-      ReadOnlyGattCharacteristic(myUUID, &TOUT, GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_READ, myProp, 0); //value pointer?
-      GattService myService(UUID_HEALTH_THERMOMETER_SERVICE, myProp, 1);
+      myServe = new GattService(UUID_HEALTH_THERMOMETER_SERVICE, myDesc, 1);
+      ser.printf("got past service\n\r");
+      //start serve + add service
+      gattServe.addService(*myServe); // it gets stuck here??
+      ser.printf("got past adding service\n\r");
+      //start temp thread
+      tempthread.start(measure_temp);
+      //event queue 
+      ser.printf("started temp thread\n\r");
+     
+      
+      
+     
 }
     
 
@@ -201,7 +215,7 @@ int main(){
     bleinit.onEventsToProcess(schedule_ble_events);
     ble_error_t init(BLE::InitializationCompleteCallbackContext *params);//initialize ble
     bleinit.init(&on_init_complete);
-    bleinit.addService(myService);
+    
 
     // This will never return...
     event_queue.dispatch_forever();
